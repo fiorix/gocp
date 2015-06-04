@@ -1,0 +1,10 @@
+# Copyright 2015 gocp authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+# use: source environ
+
+export GOPATH=$PWD
+export GOROOT=$PWD/go/1.5
+
+alias go=$GOROOT/bin/go
