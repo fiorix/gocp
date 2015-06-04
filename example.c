@@ -10,11 +10,11 @@
 typedef struct {
 	int id;
 	GoChan c;
-} data;
+} data_t;
 
 void f(void *args) {
 	int i;
-	data *d = (data*)(args);
+	data_t *d = (data_t*)(args);
 	for (i=0;;i++) {
 		int v = i*d->id;
 		printf("Goroutine %d pushing item %d\n", d->id, v);
@@ -25,7 +25,7 @@ void f(void *args) {
 
 int main() {
 	int i;
-	data d[5];
+	data_t d[5];
 	GoChan c = NewChan(0);
 	for (i = 0; i < sizeof d / sizeof d[0]; i++) {
 		d[i].id = i;
@@ -36,6 +36,6 @@ int main() {
 		int v = *(int*) ChanPop(c);
 		printf("Got item %d\n", v);
 	}
-	GoBlock();
+	//GoBlock();
 	return 0;
 }
