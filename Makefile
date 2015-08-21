@@ -9,7 +9,7 @@ CFLAGS = -fPIC -Wall -I./pkg/*/
 LDFLAGS = -L. -lgocp
 
 OS := $(shell uname -s)
-ifeq ($(OS),Darwin) # This is for clang, ignore it.
+ifeq ($(OS),Darwin) # clang
 	LDFLAGS += -Xlinker -rpath -Xlinker .
 else
 	LDFLAGS += -Wl,-rpath=$(LIBDIR)
