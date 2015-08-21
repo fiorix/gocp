@@ -12,7 +12,9 @@ LDFLAGS = -L. -lgocp
 
 ifeq ($(OS),darwin) # clang
 	PKGDIR = ./pkg/$(OS)_$(ARCH)
-	LDFLAGS += -Xlinker -rpath -Xlinker .
+	ifeq ($(BUILDMODE),c-shared)
+		LDFLAGS += -Xlinker -rpath -Xlinker .
+	endif
 endif
 
 ifeq ($(OS),linux)
@@ -21,7 +23,7 @@ ifeq ($(OS),linux)
 		LDFLAGS += -Wl,-rpath=.
 	else
 		PKGDIR = ./pkg/$(OS)_$(ARCH)
-		LDFLAGS += -Wl,-rpath=. -lpthread
+		LDFLAGS += -lpthread
 	endif
 endif
 
