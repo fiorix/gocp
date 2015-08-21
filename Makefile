@@ -1,24 +1,29 @@
 # Copyright 2015 gocp authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
+#
+# Default build mode is c-shared, but it also works if you change
+# to c-archive. On linux, you'll have to add -lpthread to LDFLAGS.
 
-all: go libcp example
+CFLAGS = -fPIC -Wall -I./pkg/*/
+LDFLAGS = -L. -lgocp
 
-go:
-	make -C go
+OS := $(shell uname -s)
+ifeq ($(OS),Darwin) # This is for clang, ignore it.
+	LDFLAGS += -Xlinker -rpath -Xlinker .
+else
+	LDFLAGS += -Wl,-rpath=$(LIBDIR)
+endif
+
+all: libcp example
 
 libcp:
-	rm -rf pkg
-	GOPATH=`pwd` GOROOT=`pwd`/go/1.5 \
-	go/1.5/bin/go install -buildmode=c-shared libgocp
-	mv pkg/*/libgocp.a libgocp.so
+	GOPATH=`pwd` go install -buildmode=c-shared libgocp
+	mv pkg/*/libgocp.a .
 	mv pkg/*/gocp.h gocp.h
 
 example:
-	cc -I pkg/*/ -o example example.c -lpthread \
-	-L. -lgocp -Wl,-rpath=.
+	gcc $(CFLAGS) -o example example.c $(LDFLAGS)
 
 clean:
-	rm -rf example
-
-.PHONY: go
+	rm -rf pkg example gocp.h libgocp.a
