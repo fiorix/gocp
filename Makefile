@@ -20,7 +20,7 @@ all: libcp example
 libcp:
 	GOPATH=`pwd` go install -buildmode=c-shared libgocp
 	mv pkg/*/libgocp.a .
-	mv pkg/*/gocp.h gocp.h
+	mv pkg/*/gocp.h .
 
 example:
 	gcc $(CFLAGS) -o example example.c $(LDFLAGS)
